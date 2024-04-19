@@ -1,6 +1,6 @@
 #import dependencies
 import json
-import time
+import statistics
 
 def get_games():
     '''Import JSON data from the game'''
@@ -27,21 +27,22 @@ def calculate_response_time():
     '''Function to calculate response time'''
     games = get_games()
     results = []
+    labels = []
     for game in games:
+        gameresults = []
         started_at = game['startedAt']
-        print(f'startedAt{time.get}')
         for i, answer in enumerate(game['answers']):
             time_answered = answer['timeAnswered']
-            print(i)
             if i == 0:
                 response_time = (time_answered - started_at) / 1000
-                results.append(response_time)
+                gameresults.append(response_time)
             else:
                 previous_answered = (time_answered - game['answers'][i-1]['timeAnswered']) / 1000
-                results.append(previous_answered)
-    print(results)
-
-
+                gameresults.append(previous_answered)
+        avg_results = statistics.mean(gameresults)
+        results.append(avg_results)
+        labels.append(started_at)
+    print(results,labels)
 
 
 #calculate_success_rate()
